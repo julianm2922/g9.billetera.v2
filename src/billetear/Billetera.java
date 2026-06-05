@@ -131,8 +131,8 @@ public class Billetera implements IBilletera{
 	 
     private List<Cuenta> filtrarCuentasPorUsuario(String dniUsuario) {
     	ArrayList<Cuenta> result = new ArrayList<Cuenta>();
-    	for (Map.Entry<String, Cuenta> entry : cuentas.entrySet()) {
-    		Cuenta cuenta = entry.getValue();
+    	
+    	for (Cuenta cuenta : cuentas.values()) {
     		if (cuenta.dniPropietario() == dniUsuario) {
     			result.add(cuenta);
     		}
@@ -141,8 +141,7 @@ public class Billetera implements IBilletera{
     }
     
     private Cuenta buscarCuentaPorAlias(String alias) { 	
-    	for (Map.Entry<String, Cuenta> entry : cuentas.entrySet()) {
-    		Cuenta cuenta = entry.getValue();
+    	for (Cuenta cuenta : cuentas.values()) {
     		if (cuenta.alias() == alias) {
     			return cuenta;
     		}
@@ -203,9 +202,8 @@ public class Billetera implements IBilletera{
 		cuentaOrigen.extraer(monto);
 		cuentaDestino.depositar(monto);
 		
-		actividades.add(new Transferencia(dniOrigen, cvuOrigen, dniDestino, cvuDestino, monto, true));
-		// actividades.add(new Transferencia(dniOrigen, cvuOrigen, dniDestino, cvuDestino, monto, true));
-    	
+		Transferencia actTransfer = new Transferencia(dniOrigen, cvuOrigen, dniDestino, cvuDestino, monto, true);
+		actividades.add(actTransfer);
     }
 	    
     /**
@@ -330,13 +328,8 @@ public class Billetera implements IBilletera{
     private ArrayList<String> filtrarActividadesPorCvu(String cvu) {
     	ArrayList<String> result = new ArrayList<String>();
     	for (Actividad act : actividades) {
-    		if (act.getCvuOrigen() == cvu) {
+    		if (act.contieneCvu(cvu)) {
     			result.add(act.toString());
-    		} else if (act instanceof Transferencia) {
-    			Transferencia transf = (Transferencia) act;
-    			if (transf.getCvuDestino() == cvu) {
-    				result.add(act.toString());
-    			}
     		}
     	}
     	
@@ -346,7 +339,7 @@ public class Billetera implements IBilletera{
     private ArrayList<String> filtrarActividadesPorUsuario(String dni) {
     	ArrayList<String> result = new ArrayList<String>();
     	for (Actividad act : actividades) {
-    		if (act.getDniOrigen() == dni) {
+    		if (act.getDniOrigen().equals(dni)) {
     			result.add(act.toString());
     		}
     	}
@@ -393,6 +386,12 @@ public class Billetera implements IBilletera{
      * @return Una lista con el detalle de las cuentas con mayor volumen.
      */
     public List<String> cuentasConMayorVolumen(int cantidadTop){
+    	HashMap<String, Integer> cuentaCantidad = new HashMap<String, Integer>();
+    	
+    	for (Actividad act : actividades) {
+    		if (cuentaCantidad.contabilizar());
+    	}
+    	
     	return new ArrayList<String>();
     }
     

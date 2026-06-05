@@ -89,6 +89,7 @@ public class BilleteraTest {
         billetera.realizarInversionRentaFija("11111111", cvuAlice, 500, 30);
 
         List<String> top = billetera.cuentasConMayorVolumen(2); 									// VOLUMEN = COUNT(TRANSACCIONES) + COUNT(INVERSIONES)
+        System.out.println(top);
         assertTrue(top.get(0).contains(cvuAlice)); // Alice tiene 3 transacciones (2 transf, 1 inv)
         assertTrue(top.get(1).contains(cvuBob)); // Bob tiene 2 (las transferencias recibidas)
     }
@@ -118,8 +119,6 @@ public class BilleteraTest {
         String cvuCorp = billetera.crearCuentaCorporativa("11111111", "empresa.corp", "30-12345678-9");
         List<String> cuentas = billetera.obtenerCuentas("11111111");
 
-        System.out.println(cuentas.get(0));
-        System.out.println(cvuCorp);
         assertEquals(1, cuentas.size());
         assertTrue(cuentas.get(0).contains(cvuCorp));
     }

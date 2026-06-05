@@ -5,7 +5,7 @@ public class Actividad {
 	private static int idActividad = 0;
 	private LocalDate fecha;
 	private String dniOrigen;
-	private String cvuOrigen;
+	protected String cvuOrigen;
 	private double monto;
 	private boolean estaAprobado;
 	
@@ -38,13 +38,13 @@ public class Actividad {
 		return dniOrigen;
 	}
 	
-	
-	
 	public boolean getEstaAprobado() {
-
 		return estaAprobado;
-		
-		}
+	}
+	
+	public boolean contieneCvu(String cvu) {
+		return cvuOrigen.equals(cvu);
+	}
 	
 	public StringBuilder __toString() {
         return new StringBuilder()

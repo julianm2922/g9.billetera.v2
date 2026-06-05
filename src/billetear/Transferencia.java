@@ -17,6 +17,11 @@ public class Transferencia extends Actividad {
 		return cvuDestino;
 	}
 	
+	@Override
+	public boolean contieneCvu(String cvu) {
+		return cvuOrigen.equals(cvu) || cvuDestino.equals(cvu);
+	}
+	
 	public StringBuilder __toString() {
         return new StringBuilder(super.toString())
     		.append("\"; dniDestino: \"")
