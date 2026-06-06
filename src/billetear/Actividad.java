@@ -1,10 +1,10 @@
 package billetear;
 import java.time.LocalDate; 
 
-public class Actividad {
-	private static int idActividad = 0;
+public abstract class Actividad {
+	protected static int idActividad = 0;
 	private LocalDate fecha;
-	private String dniOrigen;
+	protected String dniOrigen;
 	protected String cvuOrigen;
 	private double monto;
 	private boolean estaAprobado;
@@ -18,6 +18,8 @@ public class Actividad {
 		this.estaAprobado = estaAprobado;
 	}
 	
+	public abstract String getCvuTitular();
+	public abstract String getDniTitular();
 	
 	public int getIdActividad() {
 		
@@ -29,6 +31,9 @@ public class Actividad {
 		return fecha;
 	}
 
+	public double getMonto() {
+		return monto;
+	}
 	
 	public String getCvuOrigen() {
 		return cvuOrigen;

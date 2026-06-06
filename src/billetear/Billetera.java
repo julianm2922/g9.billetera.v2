@@ -2,6 +2,8 @@ package billetear;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -202,8 +204,8 @@ public class Billetera implements IBilletera{
 		cuentaOrigen.extraer(monto);
 		cuentaDestino.depositar(monto);
 		
-		Transferencia actTransfer = new Transferencia(dniOrigen, cvuOrigen, dniDestino, cvuDestino, monto, true);
-		actividades.add(actTransfer);
+		actividades.add(new TransferenciaSaliente(dniOrigen, cvuOrigen, dniDestino, cvuDestino, monto, true));
+		actividades.add(new TransferenciaEntrante(dniOrigen, cvuOrigen, dniDestino, cvuDestino, monto, true));
     }
 	    
     /**
@@ -217,8 +219,15 @@ public class Billetera implements IBilletera{
      * @return El identificador único de la inversión realizada.
      */
     public int realizarInversionRentaFija(String dni, String cvu, double monto, int plazoDias) {
-    	return 5;
-   	
+    	// TODO - agregar validacion
+    	Usuario usuario = usuarios.get(dni);
+    	Cuenta cuenta = cuentas.get(cvu);
+    	
+    	cuenta.extraer(monto);
+    	
+    	RentaFija inversion = new RentaFija(dni, cvu, monto, plazoDias, true);
+    	actividades.add(inversion);
+    	return inversion.getIdActividad();
     }
 	    
     /**
@@ -233,8 +242,15 @@ public class Billetera implements IBilletera{
      * @return El identificador único de la inversión realizada.
      */
     public int realizarInversionDivisa(String dni, String cvu, double monto, int plazoDias, String divisa, double tasa) {
-    	return 7;
+    	// TODO - agregar validacion
+    	Usuario usuario = usuarios.get(dni);
+    	Cuenta cuenta = cuentas.get(cvu);
     	
+    	cuenta.extraer(monto);
+    	
+    	VinculadaADivisa inversion = new VinculadaADivisa(dni, cvu, monto, plazoDias, true, divisa, tasa);
+    	actividades.add(inversion);
+    	return inversion.getIdActividad();
     }
     
     /**
@@ -248,7 +264,24 @@ public class Billetera implements IBilletera{
      * @return El identificador único de la inversión realizada.
      */
     public int realizarInversionLiquidez(String dni, String cvu, double monto, int plazoDias) {
-    	return 8;
+    	// TODO - agregar validacion
+    	Usuario usuario = usuarios.get(dni);
+    	Cuenta cuenta = cuentas.get(cvu);
+    	
+    	if (!(cuenta instanceof CuentaCorporativa)) 
+    		throw new IllegalArgumentException("La cuenta no es corporativa.");
+    	CuentaCorporativa cuentaCorp = (CuentaCorporativa) cuenta;
+    	
+    	Empresa empresa = empresas.get(cuentaCorp.cuit());
+    	
+    	if (!empresa.dnisAutorizados().contains(dni))
+    		throw new IllegalArgumentException("El usuario no está autorizado para operar esta cuenta corporativa.");
+    	
+    	cuenta.extraer(monto);
+    	
+    	FondoDeLiquidezEmpresarial inversion = new FondoDeLiquidezEmpresarial(dni, cvu, monto, plazoDias, true);
+    	actividades.add(inversion);
+    	return inversion.getIdActividad();
     }
     
     /**
@@ -328,7 +361,7 @@ public class Billetera implements IBilletera{
     private ArrayList<String> filtrarActividadesPorCvu(String cvu) {
     	ArrayList<String> result = new ArrayList<String>();
     	for (Actividad act : actividades) {
-    		if (act.contieneCvu(cvu)) {
+    		if (act.getCvuTitular().equals(cvu)) {
     			result.add(act.toString());
     		}
     	}
@@ -339,7 +372,7 @@ public class Billetera implements IBilletera{
     private ArrayList<String> filtrarActividadesPorUsuario(String dni) {
     	ArrayList<String> result = new ArrayList<String>();
     	for (Actividad act : actividades) {
-    		if (act.getDniOrigen().equals(dni)) {
+    		if (act.getDniTitular().equals(dni)) {
     			result.add(act.toString());
     		}
     	}
@@ -372,7 +405,13 @@ public class Billetera implements IBilletera{
      * @return El monto total invertido por el usuario.
      */
     public double obtenerTotalInvertido(String dniUsuario) {
-    	return 3.33;
+    	double suma = 0;
+    	for (Actividad act : actividades) {
+    		if (act.getDniTitular().equals(dniUsuario)) {
+    			suma += act.getMonto();
+    		}
+    	}
+    	return suma;
     }
     
     /**
@@ -386,10 +425,23 @@ public class Billetera implements IBilletera{
      * @return Una lista con el detalle de las cuentas con mayor volumen.
      */
     public List<String> cuentasConMayorVolumen(int cantidadTop){
-    	HashMap<String, Integer> cuentaCantidad = new HashMap<String, Integer>();
-    	
+    	// Contar actividades por cvu
+    	HashMap<Cuenta, Integer> cuentasCantidades = new HashMap<Cuenta, Integer>();
     	for (Actividad act : actividades) {
-    		if (cuentaCantidad.contabilizar());
+    		// String cvu = act.getCvuTitular();
+    		Cuenta cuenta = cuentas.get(act.getCvuTitular());
+    		int cantidad = cuentasCantidades.containsKey(cuenta) ? cuentasCantidades.get(cuenta) + 1 : 1;
+    		
+    		cuentasCantidades.put(cuenta, cantidad);
+    	}
+    	
+    	// Ordenar actividades
+    	ArrayList<Integer> cantidadesOrdenadas = new ArrayList<Integer>(cuentasCantidades.values());
+    	Collections.sort(cantidadesOrdenadas, Collections.reverseOrder());
+    	
+    	ArrayList<String> result = new ArrayList<String>();
+    	for (Map.Entry<Cuenta, Integer> cuentaCant : cuentasCantidades.entrySet()) {
+    		
     	}
     	
     	return new ArrayList<String>();

@@ -2,9 +2,9 @@ package billetear;
 
 import java.time.LocalDate;
 
-public class Transferencia extends Actividad {
-	private String dniDestino;
-	private String cvuDestino;
+public abstract class Transferencia extends Actividad {
+	protected String dniDestino;
+	protected String cvuDestino;
 	
 	public Transferencia(String dniOrigen, String cvuOrigen, String dniDestino, String cvuDestino, double monto, boolean estaAprobado) {
 		super(dniOrigen, cvuOrigen, monto, estaAprobado);
@@ -12,7 +12,7 @@ public class Transferencia extends Actividad {
 		this.dniDestino = dniDestino;
 		this.cvuDestino = cvuDestino;
 	}
-
+	
 	public String getCvuDestino() {
 		return cvuDestino;
 	}

@@ -3,27 +3,39 @@ package billetear;
 import java.time.LocalDate;
 
 public abstract class Inversion extends Actividad  {
-	private String desc; 
-	private LocalDate plazo;
+	protected String desc; 
+	private int plazo;
 	private boolean fuePrecancelado; 
 	
-	public Inversion (String dniOrigen, String cvuOrigen, double monto, boolean estaAprobado, LocalDate plazo, String desc) {
+	public Inversion (String dniOrigen, String cvuOrigen, double monto, boolean estaAprobado, int plazo) {
 		super(dniOrigen, cvuOrigen, monto, estaAprobado);
 		
 		this.fuePrecancelado = false;
-		this.desc = desc ;
 		this.plazo = plazo;
 		
 	}
 
+	public int getIdActividad() {
+		return this.idActividad;
+	}
+	
 	public boolean getFuePrecancelado () {
 		return fuePrecancelado;
 		
 	}
 	
-	public LocalDate getPlazo() {
+	public int getPlazo() {
 		return plazo;
-		
+	}
+	
+	@Override
+	public String getCvuTitular() {
+		return cvuOrigen;
+	}
+
+	@Override
+	public String getDniTitular() {
+		return dniOrigen;
 	}
 	
 	public abstract double calcularSaldoFinal();
