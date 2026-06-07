@@ -32,10 +32,6 @@ public class Actividades {
 		actividades.add(new ActividadInversion(tipo, i.origen(), i.monto(), i.estaAprobada(), i.plazo()));
 	}
 	
-	public static ArrayList<Actividad> obtenerTodas() {
-		return actividades;
-	}
-	
 	public static ArrayList<String> obtenerLista() {
     	ArrayList<String> lista = new ArrayList<String>();
     	
@@ -99,8 +95,6 @@ public class Actividades {
 			int cantidad = ctaCantOrden.get(i).getValue();
 			result.add(cuenta.tipo() + ": " + cuenta.alias() + " (" + cuenta.cvu() + ") " + cantidad);
 		}
-		
-		System.out.println(result);
 		
 		return result;
 	}

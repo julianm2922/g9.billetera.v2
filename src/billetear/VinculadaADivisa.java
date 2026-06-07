@@ -4,7 +4,6 @@ public class VinculadaADivisa extends Inversion {
 	private String divisa;
 	private double tasa;
 	private double montoInicialDivisa;
-	private double montoFinalDivisa;
 	
 	public VinculadaADivisa(Cuenta origen, double monto, int plazo, boolean estaAprobado, String divisa, double tasa) {
 		super(origen, monto, estaAprobado, plazo);
@@ -20,10 +19,20 @@ public class VinculadaADivisa extends Inversion {
 	}
 	
 	@Override
-	public void precancelar() {
-		super.precancelar();
-	}
-	
+    protected StringBuilder prepararToString() {
+        return super.prepararToString()
+            .append("\"; divisa: \"").append(divisa)
+            .append("\"; tasa: \"").append(tasa)
+            .append("\"; montoInicialDivisa: \"").append(montoInicialDivisa);
+    }
+
+    @Override
+    public String toString() {
+        return prepararToString()
+            .append("\")")
+            .toString();
+    }
+
 	@Override
 	public double calcularRendimientos() {
 		int divisor = fuePrecancelado ? 2 : 1;

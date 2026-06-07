@@ -1,24 +1,13 @@
 package billetear;
 
-public class FondoDeLiquidezEmpresarial extends Inversion {
-	private double montoMinimo;
+public class FondoDeLiquidezEmpresarial extends VinculadaADivisa {
+	private static double montoMinimo = 500000.00d;
 	
 	public FondoDeLiquidezEmpresarial (Cuenta origen, double monto, int plazo, boolean estaAprobado) {
-		super (origen, monto, estaAprobado, plazo);
+		super(origen, monto, plazo, estaAprobado, "FLE", 0.08d);
+		if (monto < montoMinimo) throw new IllegalArgumentException("Inversión inicial insuficiente.");
 		this.desc = "FondoDeLiquidezEmpresarial";
-		this.montoMinimo = 500000d;
-	}
 
-	@Override
-	public double calcularSaldoFinal() {
-		// TODO Auto-generated method stub
-		return 0;
-	}
-
-	@Override
-	protected double calcularRendimientos() {
-		// TODO Auto-generated method stub
-		return 0;
 	}
 
 }

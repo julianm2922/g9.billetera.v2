@@ -19,12 +19,19 @@ public abstract class ActividadTransferencia extends Actividad {
 		return cvuOrigen.equals(cvu) || cvuDestino.equals(cvu);
 	}*/
 	
-	public StringBuilder __toString() {
-        return new StringBuilder(super.toString())
+	public StringBuilder prepararToString() {
+        return super.prepararToString()
     		.append("\"; dniDestino: \"")
             .append(destino.dniPropietario())
     		.append("\"; cvuDestino: \"")
             .append(destino.cvu());
+    }
+
+    @Override
+    public String toString() {
+        return prepararToString()
+            .append("\")")
+            .toString();
     }
 
 }

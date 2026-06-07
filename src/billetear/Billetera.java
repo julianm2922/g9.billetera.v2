@@ -1,13 +1,8 @@
 package billetear;
 
-import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
 
 public class Billetera implements IBilletera{
 	
@@ -123,7 +118,6 @@ public class Billetera implements IBilletera{
     public String crearCuentaCorporativa(String dniUsuario, String alias, String cuitEmpresa) {
     	if (!empresas.containsKey(cuitEmpresa)) throw new RuntimeException("No existe la empresa.");
     	if (this.buscarCuentaPorAlias(alias) != null) throw new RuntimeException("Ya existe una cuenta con ese alias.");
-    	// if (usuarios.containsKey(dniUsuario)) throw new RuntimeException("No existe el usuario");
     	
     	CuentaCorporativa ctaCorp = new CuentaCorporativa(dniUsuario, alias, cuitEmpresa);
     	String cvu = ctaCorp.cvu();
@@ -131,25 +125,6 @@ public class Billetera implements IBilletera{
     	return cvu;
     }
 	 
-    private List<Cuenta> filtrarCuentasPorUsuario(String dniUsuario) {
-    	ArrayList<Cuenta> result = new ArrayList<Cuenta>();
-    	
-    	for (Cuenta cuenta : cuentas.values()) {
-    		if (cuenta.dniPropietario() == dniUsuario) {
-    			result.add(cuenta);
-    		}
-    	}
-    	return result;
-    }
-    
-    private Cuenta buscarCuentaPorAlias(String alias) { 	
-    	for (Cuenta cuenta : cuentas.values()) {
-    		if (cuenta.alias() == alias) {
-    			return cuenta;
-    		}
-    	}
-    	return null;
-    }
     /**
      * 3) Obtiene una lista con los identificadores (CVU o alias) de todas las
      * cuentas asociadas a un usuario.
@@ -198,9 +173,7 @@ public class Billetera implements IBilletera{
     	
     	Cuenta cuentaOrigen = cuentas.get(cvuOrigen);
     	Cuenta cuentaDestino = cuentas.get(cvuDestino);
-    	String dniOrigen = cuentaOrigen.dniPropietario();
-		String dniDestino = cuentaDestino.dniPropietario();
-    	
+
 		cuentaOrigen.extraer(monto);
 		cuentaDestino.depositar(monto);
 		
@@ -219,11 +192,10 @@ public class Billetera implements IBilletera{
      */
     public int realizarInversionRentaFija(String dni, String cvu, double monto, int plazoDias) {
     	// TODO - agregar validacion
-    	Usuario usuario = usuarios.get(dni);
     	Cuenta cuenta = cuentas.get(cvu);
-    	
+
     	cuenta.extraer(monto);
-    	
+
     	RentaFija inversion = new RentaFija(cuenta, monto, plazoDias, true);
     	Actividades.registrarInversionRentaFija(inversion);
     	
@@ -245,11 +217,10 @@ public class Billetera implements IBilletera{
      */
     public int realizarInversionDivisa(String dni, String cvu, double monto, int plazoDias, String divisa, double tasa) {
     	// TODO - agregar validacion
-    	Usuario usuario = usuarios.get(dni);
     	Cuenta cuenta = cuentas.get(cvu);
-    	
+
     	cuenta.extraer(monto);
-    	
+
     	VinculadaADivisa inversion = new VinculadaADivisa(cuenta, monto, plazoDias, true, divisa, tasa);
     	Actividades.registrarInversionVinculadaADivisa(inversion);
     	
@@ -269,9 +240,8 @@ public class Billetera implements IBilletera{
      * @return El identificador único de la inversión realizada.
      */
     public int realizarInversionLiquidez(String dni, String cvu, double monto, int plazoDias) {
-    	Usuario usuario = usuarios.get(dni);
     	Cuenta cuenta = cuentas.get(cvu);
-    	
+
     	if (!(cuenta instanceof CuentaCorporativa)) 
     		throw new IllegalArgumentException("La cuenta no es corporativa.");
     	CuentaCorporativa cuentaCorp = (CuentaCorporativa) cuenta;
@@ -304,6 +274,11 @@ public class Billetera implements IBilletera{
     public void precancelarInversion(String dni, String cvu, int idInversion) {
     	// verificar que la cuenta y la inversion le pertenece al usuario
     	Inversion inversion = inversiones.get(idInversion);
+    	if (inversion == null) 
+    		throw new IllegalArgumentException("Id de inversión inválido.");
+    	if (inversion.origen.cvu() != cvu || inversion.origen.dniPropietario() != dni)
+    		throw new IllegalArgumentException("La inversión no le pertenece a la cuenta/usuario especificados.");
+    	
     	inversion.precancelar();
     	inversion.origen().depositar(inversion.monto());
     }
@@ -344,7 +319,8 @@ public class Billetera implements IBilletera{
      *
      * @return Una lista con el detalle de las actividades globales.
      */
-    public List<String> consultarHistorialGlobal(){    	
+    public List<String> consultarHistorialGlobal(){
+    	System.out.println(Actividades.obtenerLista());
     	return Actividades.obtenerLista();
     }
     
@@ -423,9 +399,51 @@ public class Billetera implements IBilletera{
      * 
      */
     // void procesarInversionesQueVencenHoy();
-	public static void main(String[] args) {
-		// TODO Auto-generated method stub
+    private List<Cuenta> filtrarCuentasPorUsuario(String dniUsuario) {
+    	ArrayList<Cuenta> result = new ArrayList<Cuenta>();
+    	
+    	for (Cuenta cuenta : cuentas.values()) {
+    		if (cuenta.dniPropietario() == dniUsuario) {
+    			result.add(cuenta);
+    		}
+    	}
+    	return result;
+    }
+    
+    private Cuenta buscarCuentaPorAlias(String alias) {
+    	for (Cuenta cuenta : cuentas.values()) {
+    		if (cuenta.alias() == alias) {
+    			return cuenta;
+    		}
+    	}
+    	return null;
+    }
 
-	}
+    @Override
+    public String toString() {
+        StringBuilder res = new StringBuilder();
+
+        res.append("=== Cuentas ===\n");
+        for (Cuenta c : cuentas.values())
+        	res.append("  ").append(c).append("\n");
+
+        res.append("=== Usuarios ===\n");
+        for (Usuario u : usuarios.values())
+        	res.append("  ").append(u).append("\n");
+
+        res.append("=== Empresas ===\n");
+        for (Empresa e : empresas.values())
+        	res.append("  ").append(e).append("\n");
+
+        res.append("=== Inversiones ===\n");
+        for (Inversion i : inversiones.values())
+        	res.append("  ").append(i).append("\n");
+
+        res.append("=== Actividades ===\n");
+        for (String a : Actividades.obtenerLista())
+        	res.append("  ").append(a).append("\n");
+
+        return res.toString();
+    }
 
 }

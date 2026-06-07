@@ -27,6 +27,15 @@ public class CuentaCorporativa extends Cuenta {
     	return cuit;
     }
 
+    @Override
+    public String toString() {
+        return super.prepararToString()
+            .append("\"; cuit: \"")
+            .append(cuit)
+            .append("\")")
+            .toString();
+    }
+
     /*
     private void verificarAcceso() throws RuntimeException {
     	if (super.propietario() instanceof Persona) {

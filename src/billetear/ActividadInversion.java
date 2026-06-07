@@ -14,5 +14,14 @@ public class ActividadInversion extends Actividad {
 	public Cuenta titular() {
 		return origen;
 	}
-	
+
+    @Override
+    public String toString() {
+        return super.prepararToString()
+            .append("\"; desc: \"").append(desc)
+            .append("\"; plazo: \"").append(plazo)
+            .append("\")")
+            .toString();
+    }
+
 }

@@ -65,6 +65,26 @@ public abstract class Inversion  {
 	}
 	
 	protected abstract double calcularRendimientos();
+
+    protected StringBuilder prepararToString() {
+        return new StringBuilder()
+            .append("(id: \"").append(id())
+            .append("\"; desc: \"").append(desc)
+            .append("\"; origen: \"").append(origen.cvu())
+            .append("\"; monto: \"").append(monto)
+            .append("\"; plazo: \"").append(plazo())
+            .append("\"; estaAprobada: \"").append(estaAprobada())
+            .append("\"; fuePrecancelado: \"").append(fuePrecancelado)
+            .append("\"; fechaCreacion: \"").append(fechaCreacion)
+            .append("\"; fechaCierre: \"").append(fechaCierre);
+    }
+
+    @Override
+    public String toString() {
+        return prepararToString()
+            .append("\")")
+            .toString();
+    }
 	// @Override
 	/*
 	public String getCvuTitular() {

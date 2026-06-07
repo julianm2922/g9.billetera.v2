@@ -3,7 +3,6 @@ package billetear;
 public class Cuenta {
     private String cvu;
     private String alias;
-    private double montoEnInversiones;
     protected String tipo;
     protected double saldo;
     protected String dniPropietario;
@@ -49,27 +48,24 @@ public class Cuenta {
         saldo += monto;
     }
 
-    public double dineroInvertido() {
-        return montoEnInversiones;
-    }
-    
     /*
     public void agregarInversion();
     */
 
-    public StringBuilder __toString() {
+    protected StringBuilder prepararToString() {
         return new StringBuilder()
-        	.append(this.getClass())          
-        	.append(" (cvu: \"")
-            .append(cvu)
-            .append("\"; alias: \"")
-            .append(alias)
-            .append("\"; saldo: \"")
-            .append(saldo)
-            .append("\"; montoEnInversiones: \"")
-            .append(montoEnInversiones)
-            .append("\"; dniPropietario: \"")
-            .append(dniPropietario);
+            .append(tipo)
+            .append(" (cvu: \"").append(cvu)
+            .append("\"; alias: \"").append(alias)
+            .append("\"; saldo: \"").append(saldo)
+            .append("\"; dniPropietario: \"").append(dniPropietario);
+    }
+
+    @Override
+    public String toString() {
+        return prepararToString()
+            .append("\")")
+            .toString();
     }
     
     /** PRIVADOS */
