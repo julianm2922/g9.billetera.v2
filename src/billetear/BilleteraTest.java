@@ -84,12 +84,13 @@ public class BilleteraTest {
         String cvuAlice = billetera.crearCuentaPremium("11111111", "alice.p", 5000000);
         String cvuBob = billetera.crearCuentaPremium("22222222", "bob.p", 5000000);
 
+        System.out.println(cvuAlice);
+        System.out.println(cvuBob);
         billetera.realizarTransferencia(cvuAlice, cvuBob, 100);
         billetera.realizarTransferencia(cvuAlice, cvuBob, 100);
         billetera.realizarInversionRentaFija("11111111", cvuAlice, 500, 30);
 
         List<String> top = billetera.cuentasConMayorVolumen(2); 									// VOLUMEN = COUNT(TRANSACCIONES) + COUNT(INVERSIONES)
-        System.out.println(top);
         assertTrue(top.get(0).contains(cvuAlice)); // Alice tiene 3 transacciones (2 transf, 1 inv)
         assertTrue(top.get(1).contains(cvuBob)); // Bob tiene 2 (las transferencias recibidas)
     }

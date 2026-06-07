@@ -4,22 +4,19 @@ import java.time.LocalDate;
 public abstract class Actividad {
 	protected static int idActividad = 0;
 	private LocalDate fecha;
-	protected String dniOrigen;
-	protected String cvuOrigen;
+	protected Cuenta origen;
 	private double monto;
 	private boolean estaAprobado;
 	
-	public Actividad (String dniOrigen, String cvuOrigen, double monto, boolean estaAprobado) {
+	public Actividad (Cuenta origen, double monto, boolean estaAprobado) {
 		idActividad = idActividad++;
 		this.fecha = LocalDate.now();
-		this.dniOrigen = dniOrigen;
-		this.cvuOrigen = cvuOrigen;
+		this.origen = origen;
 		this.monto = monto;
 		this.estaAprobado = estaAprobado;
 	}
 	
-	public abstract String getCvuTitular();
-	public abstract String getDniTitular();
+	public abstract Cuenta titular();
 	
 	public int getIdActividad() {
 		
@@ -36,20 +33,21 @@ public abstract class Actividad {
 	}
 	
 	public String getCvuOrigen() {
-		return cvuOrigen;
+		return origen.cvu();
 	}
 	
 	public String getDniOrigen() {
-		return dniOrigen;
+		return origen.dniPropietario();
 	}
 	
 	public boolean getEstaAprobado() {
 		return estaAprobado;
 	}
 	
+	/*
 	public boolean contieneCvu(String cvu) {
-		return cvuOrigen.equals(cvu);
-	}
+		return origen.cvu().equals(cvu);
+	}*/
 	
 	public StringBuilder __toString() {
         return new StringBuilder()
@@ -59,9 +57,9 @@ public abstract class Actividad {
             .append("\"; fecha: \"")
             .append(fecha)
             .append("\"; dniOrigen: \"")
-            .append(dniOrigen)
-            .append("\"; origen: \"")
-            .append(cvuOrigen)
+            .append(origen.dniPropietario())
+            .append("\"; cvuOrigen: \"")
+            .append(origen.cvu())
             .append("\"; monto: \"")
             .append(monto)
             .append("\"; estaAprobado: \"")

@@ -1,12 +1,10 @@
 package billetear;
 
-import java.time.LocalDate;
-
 public class FondoDeLiquidezEmpresarial extends Inversion {
 	private double montoMinimo;
 	
-	public FondoDeLiquidezEmpresarial (String dniOrigen, String cvuOrigen, double monto, int plazo, boolean estaAprobado) {
-		super (dniOrigen, cvuOrigen, monto, estaAprobado, plazo);
+	public FondoDeLiquidezEmpresarial (Cuenta origen, double monto, int plazo, boolean estaAprobado) {
+		super (origen, monto, estaAprobado, plazo);
 		this.desc = "FondoDeLiquidezEmpresarial";
 		this.montoMinimo = 500000d;
 	}
@@ -18,15 +16,9 @@ public class FondoDeLiquidezEmpresarial extends Inversion {
 	}
 
 	@Override
-	public String getCvuTitular() {
+	protected double calcularRendimientos() {
 		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public String getDniTitular() {
-		// TODO Auto-generated method stub
-		return null;
+		return 0;
 	}
 
 }

@@ -5,7 +5,6 @@ public class Cuenta {
     private String alias;
     private double montoEnInversiones;
     protected String tipo;
-    
     protected double saldo;
     protected String dniPropietario;
 
