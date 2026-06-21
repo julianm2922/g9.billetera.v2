@@ -19,7 +19,7 @@ public class VinculadaADivisa extends Inversion {
 	}
 	
 	@Override
-    protected StringBuilder prepararToString() {
+    public StringBuilder prepararToString() {
         return super.prepararToString()
             .append("\"; divisa: \"").append(divisa)
             .append("\"; tasa: \"").append(tasa)

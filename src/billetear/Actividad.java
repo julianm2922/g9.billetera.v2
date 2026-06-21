@@ -6,7 +6,7 @@ public abstract class Actividad {
 	protected int idActividad;
 	private LocalDate fecha;
 	protected Cuenta origen;
-	private double monto;
+	protected double monto;
 	private boolean estaAprobado;
 
 	public Actividad (Cuenta origen, double monto, boolean estaAprobado) {
@@ -16,8 +16,14 @@ public abstract class Actividad {
 		this.monto = monto;
 		this.estaAprobado = estaAprobado;
 	}
-	
-	public abstract Cuenta titular();
+
+	public double monto() {
+		return monto;
+	}
+
+	public boolean estaAprobado() {
+		return estaAprobado;
+	}
 
 	public StringBuilder prepararToString() {
         return new StringBuilder()

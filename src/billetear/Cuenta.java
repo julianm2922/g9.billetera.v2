@@ -1,11 +1,15 @@
 package billetear;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class Cuenta {
     private String cvu;
     private String alias;
     protected String tipo;
     protected double saldo;
     protected String dniPropietario;
+    protected ArrayList<Actividad> actividades;
 
     public Cuenta(String dniPropietario, String alias) {
         validarAlias(alias);
@@ -14,6 +18,15 @@ public class Cuenta {
         this.dniPropietario = dniPropietario;
         this.saldo = 0;
         this.cvu = Utilitarios.generarSiguienteCvu();
+        this.actividades = new ArrayList<Actividad>();
+    }
+
+    public void agregarActividad(Actividad actividad) {
+    	actividades.add(actividad);
+    }
+
+    public List<Actividad> actividades() {
+    	return actividades;
     }
 
     public String cvu() { 

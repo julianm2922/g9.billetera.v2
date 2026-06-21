@@ -9,19 +9,6 @@ public class CuentaCorporativa extends Cuenta {
         this.cuit = cuit;
         this.tipo = "CuentaCorporativa";
     }
-    /*
-    @Override
-    public void extraer(double monto) {
-        // verificarAcceso();
-        super.extraer(monto);
-    }
-
-    @Override
-    
-    public void depositar(double monto) {
-        // verificarAcceso();
-        super.depositar(monto);
-    }*/
     
     public String cuit() {
     	return cuit;
@@ -36,17 +23,4 @@ public class CuentaCorporativa extends Cuenta {
             .toString();
     }
 
-    /*
-    private void verificarAcceso() throws RuntimeException {
-    	if (super.propietario() instanceof Persona) {
-    		Persona usuario = (Persona) super.propietario();
-    		if (!(
-	            usuario.estaAutorizado() && 
-	            usuario.cuitAutorizado() == cuit
-	        )) {
-	            throw new RuntimeException("El usuario no está autorizado para operar en esta cuenta.");
-	        }
-    	}
-        
-    }*/
 }

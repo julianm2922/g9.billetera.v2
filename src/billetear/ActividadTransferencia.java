@@ -13,11 +13,6 @@ public abstract class ActividadTransferencia extends Actividad {
 		return destino;
 	}
 	
-	/*
-	@Override
-	public boolean contieneCvu(String cvu) {
-		return cvuOrigen.equals(cvu) || cvuDestino.equals(cvu);
-	}*/
 	
 	public StringBuilder prepararToString() {
         return super.prepararToString()
