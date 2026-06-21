@@ -170,8 +170,9 @@ public class Billetera implements IBilletera{
 		cuentaOrigen.extraer(monto);
 		cuentaDestino.depositar(monto);
 
-		cuentaOrigen.agregarActividad(new ActividadTransferenciaSaliente(cuentaOrigen, cuentaDestino, monto, true));
-		cuentaDestino.agregarActividad(new ActividadTransferenciaEntrante(cuentaOrigen, cuentaDestino, monto, true));
+		ActividadTransferencia transferencia = new ActividadTransferencia(cuentaOrigen, cuentaDestino, monto, true);
+		cuentaOrigen.agregarActividad(transferencia);
+		cuentaDestino.agregarActividad(transferencia);
     }
 
     /**

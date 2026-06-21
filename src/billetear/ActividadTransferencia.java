@@ -1,6 +1,6 @@
 package billetear;
 
-public abstract class ActividadTransferencia extends Actividad {
+public class ActividadTransferencia extends Actividad {
 	protected Cuenta destino;
 	
 	public ActividadTransferencia(Cuenta origen, Cuenta destino, double monto, boolean estaAprobado) {
